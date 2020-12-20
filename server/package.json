@@ -1,0 +1,24 @@
+{
+  "name": "msacwatchschedule-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vendia/serverless-express": "^3.4.0",
+    "axios": "^0.21.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pastebin-ts": "^1.2.0",
+    "qs": "^6.7.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}

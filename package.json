@@ -1,0 +1,17 @@
+{
+  "name": "msacwatchschedule",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "preinstall": "npm i --prefix client && npm i --prefix server",
+    "deploy": "cd ./server && sls deploy",
+    "server": "NODE_ENV=development npm run server --prefix server",
+    "client": "npm start --prefix client",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Louis Mollick",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

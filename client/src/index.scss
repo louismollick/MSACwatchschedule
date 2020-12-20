@@ -1,0 +1,79 @@
+@import './_variables';
+@import './bootstrap.min';
+
+body {
+  margin-top: 0;
+  margin-bottom: 0;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.App {
+  text-align: center;
+  font-size: large;
+  height: 100vh;
+}
+
+.titleText{
+  font-size: 40px;
+}
+
+.logo {
+  width: 25px;
+  margin-right: 5px;
+}
+
+.partyContainer{
+  max-width: 800px;
+}
+
+.partyContainer h6{
+  color: $gray-100
+}
+
+.partyRow{
+  background-color: $gray-700;
+  position: relative;
+  padding: 1em;
+  border-radius: 1em;
+  margin: 1em;
+}
+
+.partyRow p>span{
+  display: block;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.partyRow p{
+  margin-bottom: 0;
+}
+
+.partyRow p>span:last-child{
+  margin-bottom: 0px;
+}
+
+.partyRow img{
+  max-height: 175px;
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: $gray-500;
+}
+
+.currEpisode{
+  width: 30px;
+}
+
+.editBtn{
+  top: 1em;
+  right: 1em;
+}
+
+.btn{
+  vertical-align: baseline;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
