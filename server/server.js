@@ -1,8 +1,8 @@
 const express = require('express');
-const serverlessExpress = require('@vendia/serverless-express');
-const axios = require('axios');
 const cors = require('cors');
+const serverlessExpress = require('@vendia/serverless-express');
 const PastebinAPI = require('pastebin-ts');
+const axios = require('axios');
 const app = express();
 
 require('dotenv').config();
@@ -32,11 +32,8 @@ app.post('/edit', async (req, res) => {
 			expiration: '10M'
 		});
 		console.log(`Successfully created Pastebin with link : ${pastebin_link}`);
-
-		// Save to Discord
-		// TODO
-
-		res.status(200).json({ success: true, embed });
+		
+		res.status(200).send(`!ecembed ${process.env.MESSAGE_ID} #watch-schedule ${pastebin_link}`);
 	} catch (error) {
 		console.error(error);
 		res.status(400).json({ success: false, error })
