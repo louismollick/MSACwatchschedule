@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Spinner } from 'react-bootstrap';
 import axios from 'axios';
+
 import Party from './Party';
 import SaveModal from './SaveModal';
+import MSACHeader from './MSACHeader';
 
 const GIST_ID = 'c4300929d330218f61179294eb1c2a54';
 
@@ -31,9 +33,10 @@ const App = () => {
         setSaving(false);
         setEmbedCommand(res.data);
         setLoaded(false);
-        setTimeout(() => {
+        setTimeout(() => { 
+          // Timeout so the the Github Gist has time to update
           fetchData();
-        }, 1000);
+        }, 5000);
       })
       .catch(err => {
         setSaving(false);
@@ -94,19 +97,12 @@ const App = () => {
 
   return (
     <div className="App container d-flex flex-column partyContainer mx-auto min-vh-100">
-      <div className="row justify-content-center pt-5 pb-3">
-        <div>
-          <h6 className="mb-0 font-weight-bold">
-            <img alt={"MSAC logo"} src="msactransparent.png" className="logo"></img>MSAC
-          </h6>
-          <div className="row titleText">Watch Schedule 🍿</div>
-        </div>
-      </div>
+      <MSACHeader/>
       {renderList()}
       <footer className="p-3 mt-auto">
         {"Made with love <3"}
       </footer>
-      <SaveModal 
+      <SaveModal
         onSave={onSave} 
         showModal={showModal} 
         setShowModal={setShowModal} 
