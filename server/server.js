@@ -70,11 +70,19 @@ const convertToEmbed = data => {
 				},
 				...data.map(party => {
 					return {
-						"name": `:${party.emoji}: - ${party.name}`,
+						"name": `:${renameToDiscordEmojiName(party.emoji)}: - ${party.name}`,
 						"value": `[MyAnimeList](https://myanimelist.net/anime/${party.mal_id})\nWhen : ${party.when}\nMost recent session : ${party.lastSession}\nMost recently watched episode : ${party.curr} / ${party.total}`
 					}
 				})
 			]
 		}
+	}
+}
+
+const renameToDiscordEmojiName = (string) => {
+	switch (string) {
+		case "male_mage": return "man_mage"
+		case "female_mage": return "woman_mage"
+		default: return string;
 	}
 }

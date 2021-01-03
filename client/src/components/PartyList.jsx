@@ -33,9 +33,11 @@ const PartyList = ({
     );
   }
   return (
-    <Spinner animation="border" role="status" className="mt-5 text-light mx-auto">
-      <span className="sr-only">Loading dayooo...</span>
-    </Spinner>
+    <div className="d-flex pb-5 flex-grow-1 justify-content-center align-items-center">
+      <Spinner animation="border" role="status" className="text-light position-relative">
+        <span className="sr-only">Loading dayooo...</span>
+      </Spinner>
+    </div>
   );
 };
 

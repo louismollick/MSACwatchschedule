@@ -1,6 +1,25 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import { Emoji } from 'emoji-mart';
+import { Button } from 'react-bootstrap';
+
+const nth = (d) => {
+  if (d > 3 && d < 21) return 'th';
+  switch (d % 10) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+};
+
+const getTodayDate = () => {
+  const today = new Date();
+  const day = today.getDate();
+  const month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][today.getMonth()];
+
+  return `${month} ${day}${nth(day)} ${today.getFullYear()}`;
+};
 
 const Party = ({
   localPartyData, serverPartyData, editing, toggleEdit, setPartyData,
@@ -22,47 +41,46 @@ const Party = ({
         {editing && (
           <>
             <span>
-              When :
+              {'When : '}
               <input
                 value={localPartyData.when}
                 onChange={(e) => setPartyData({ ...localPartyData, when: e.target.value })}
               />
             </span>
             <span>
-              Most recent session :
+              {'Most recent session : '}
               <input
+                type="text"
                 value={localPartyData.lastSession}
                 onChange={(e) => setPartyData({ ...localPartyData, lastSession: e.target.value })}
               />
+              <Button type="button" onClick={() => setPartyData({ ...localPartyData, lastSession: getTodayDate() })}>
+                Today
+              </Button>
             </span>
             <span>
-              Most recently watched episode :
+              {'Most recently watched episode : '}
               <input
-                className="currEpisode"
+                type="number"
+                className="currEpisode mx-1"
                 value={localPartyData.curr}
                 onChange={(e) => setPartyData({ ...localPartyData, curr: e.target.value })}
               />
               /
               {serverPartyData.total}
-              <button type="button" className="btn btn-primary ml-3" onClick={() => setPartyData({ ...localPartyData, curr: localPartyData.curr + 1 })}> + </button>
             </span>
           </>
         )}
         {!editing && (
           <>
             <span>
-              When :
-              {serverPartyData.when}
+              {`When : ${serverPartyData.when}`}
             </span>
             <span>
-              Most recent session :
-              {serverPartyData.lastSession}
+              {`Most recent session : ${serverPartyData.lastSession}`}
             </span>
             <span>
-              Most recently watched episode :
-              {serverPartyData.curr}
-              /
-              {serverPartyData.total}
+              {`Most recently watched episode : ${serverPartyData.curr} / ${serverPartyData.total}`}
             </span>
           </>
         )}
