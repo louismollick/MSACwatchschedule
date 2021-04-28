@@ -1,30 +1,18 @@
-const express = require('express');
-const cors = require('cors');
-const serverlessExpress = require('@vendia/serverless-express');
+import express from 'express';
+import axios from 'axios';
+import passport from 'passport';
+
 const PastebinAPI = require('pastebin-ts');
-const axios = require('axios');
-const app = express();
+const router = express.Router();
 
-require('dotenv').config();
-app.use(cors());
-app.use(express.json());
-
-app.post('/edit', async (req, res) => {
+router.post('/edit', passport.authenticate(['jwt'], { session: false }), async (req, res) => {
 	try {
-		// Save to Gist (basically the persistance)
-		const gist_data = { "description": "", "files": { "msacwatchschedule.json": { "content": JSON.stringify(req.body) } } };
-		await axios({
-			method: 'PATCH',
-			headers: { "Authorization": `token ${process.env.GITHUB_API_TOKEN}`, "Accept": "application/vnd.github.v3+json" },
-			data: gist_data,
-			url: `https://api.github.com/gists/${process.env.GIST_ID}`,
-		});
+		await saveToGist(req.body);
 		console.log("Successfully updated Gist...");
 
-		// Save Embed to a PasteBin
 		const embed = convertToEmbed(req.body);
 		const pastebin_link = await (new PastebinAPI({
-			'api_dev_key': process.env.PASTEBIN_DEV_KEY,
+			'api_dev_key': process.env.PASTEBIN_DEV_KEY!,
 		})).createPaste({
 			text: JSON.stringify(embed),
 			title: 'MSACwatchschedule',
@@ -32,26 +20,15 @@ app.post('/edit', async (req, res) => {
 			expiration: '10M'
 		});
 		console.log(`Successfully created Pastebin with link : ${pastebin_link}`);
-		
-		res.status(200).send(`!ecembed ${process.env.MESSAGE_ID} #watch-schedule ${pastebin_link}`);
+
+		res.status(200).send(`!ecembed ${process.env.MESSAGE_ID!} #watch-schedule ${pastebin_link}`);
 	} catch (error) {
 		console.error(error);
 		res.status(400).json({ success: false, error })
 	}
 });
 
-if (process.env.NODE_ENV == "development") {
-	const server = app.listen(5000, () => {
-		console.log(`Listening on port ${server.address().port}...`);
-	});
-}
-
-const server = serverlessExpress.createServer(app);
-exports.handler = (event, context) => {
-	return serverlessExpress.proxy(server, event, context);
-}
-
-const convertToEmbed = data => {
+const convertToEmbed = (data: any) => {
 	return {
 		"embed": {
 			"color": 15158332,
@@ -68,7 +45,7 @@ const convertToEmbed = data => {
 					"name": ":question: - Watch party suggestions",
 					"value": "Do you have a show, movie, VN, etc. that you'd like to watch with other weebs? @ this role to ask if anyone is interested! React with this emote to be notified when someone suggests a watch party!"
 				},
-				...data.map(party => {
+				...data.map((party: any) => {
 					return {
 						"name": `:${renameToDiscordEmojiName(party.emoji)}: - ${party.name}`,
 						"value": `[MyAnimeList](https://myanimelist.net/anime/${party.mal_id})\nWhen : ${party.when}\nMost recent session : ${party.lastSession}\nMost recently watched episode : ${party.curr} / ${party.total}`
@@ -79,10 +56,22 @@ const convertToEmbed = data => {
 	}
 }
 
-const renameToDiscordEmojiName = (string) => {
+const renameToDiscordEmojiName = (string: string) => {
 	switch (string) {
 		case "male_mage": return "man_mage"
 		case "female_mage": return "woman_mage"
 		default: return string;
 	}
+};
+
+const saveToGist = (body: any) => {
+	const gist_data = { "description": "", "files": { "msacwatchschedule.json": { "content": JSON.stringify(body) } } };
+	return axios({
+		method: 'PATCH',
+		headers: { "Authorization": `token ${process.env.GITHUB_API_TOKEN!}`, "Accept": "application/vnd.github.v3+json" },
+		data: gist_data,
+		url: `https://api.github.com/gists/${process.env.GIST_ID!}`,
+	});
 }
+
+export default router;
