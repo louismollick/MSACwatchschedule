@@ -5,6 +5,8 @@ jspm_packages
 # Serverless directories
 .serverless
 
+.dynamodb
+
 .env
 dist
 src/keys/id_rsa_pub.pem

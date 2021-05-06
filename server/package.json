@@ -2,28 +2,30 @@
   "name": "msacwatchschedule-server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "set NODE_ENV=production && node ./dist/server.js",
-    "server": "set NODE_ENV=development && ts-node-dev ./src/server.ts"
+    "start": "NODE_ENV=production node ./dist/server.js",
+    "dev": "NODE_ENV=development sls offline start",
+    "debug": "export SLS_DEBUG=* && node --inspect /usr/local/bin/serverless offline -s dev",
+    "lint": "eslint . --ext .ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@vendia/serverless-express": "^4.3.4",
     "axios": "^0.21.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
+    "dynamoose": "^2.7.3",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "passport": "^0.4.1",
     "passport-discord": "^0.1.4",
     "passport-jwt": "^4.0.0",
     "pastebin-ts": "^1.2.0",
-    "qs": "^6.7.0"
+    "qs": "^6.7.0",
+    "serverless-http": "^2.7.0"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.75",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
     "@types/jsonwebtoken": "^8.5.1",
@@ -33,6 +35,14 @@
     "@types/passport-discord": "^0.1.3",
     "@types/passport-jwt": "^3.0.5",
     "@types/request-promise-native": "^1.0.17",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "eslint": "^7.25.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-import-resolver-typescript": "^2.4.0",
+    "eslint-plugin-import": "^2.22.1",
+    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-offline": "^6.9.0",
     "ts-node": "^9.1.1",
     "ts-node-dev": "^1.1.6",
     "typescript": "^4.2.4"

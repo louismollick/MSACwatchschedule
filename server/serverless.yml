@@ -1,6 +1,6 @@
 service: msacwatchschedule
 
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 provider:
   name: aws
@@ -8,13 +8,21 @@ provider:
 
 functions:
   api:
-    handler: server.handler
+    handler: handler
     events:
-      - http:
-          path: /
-          method: get
-          cors: true
-      - http:
-          path: /{proxy+}
-          method: any
-          cors: true
+      - http: ANY /
+      - http: "ANY /{proxy+}"
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline # serverless-offline needs to be last in the list
+
+custom:
+  serverless-offline:
+    httpPort: 5000
+    noPrependStageInUrl: true
+  dynamodb:
+    stages:
+      - ${self:provider.stage}
+
+useDotenv: true
